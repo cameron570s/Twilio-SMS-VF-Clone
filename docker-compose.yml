@@ -1,0 +1,24 @@
+version: '3'
+services:
+  vf-analytics-proxy:
+    build: .
+    restart: unless-stopped
+    image: 'vf-sms-twilio'
+    container_name: 'vf-sms-twilio'
+    ports:
+      - '${PORT}:${PORT}'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - TWILIO_ACCOUNT_SID = ${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN = ${TWILIO_AUTH_TOKEN}
+      - VOICEFLOW_API_KEY = ${VOICEFLOW_API_KEY}
+      - VOICEFLOW_PROJECT_ID = ${VOICEFLOW_PROJECT_ID}
+      - VOICEFLOW_VERSION_ID = ${VOICEFLOW_VERSION_ID}
+      - PORT = ${PORT}
+      - NODE_ENV = ${NODE_ENV}
